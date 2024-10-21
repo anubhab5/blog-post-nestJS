@@ -102,7 +102,9 @@ export class Post {
   /**
    *
    */
-  @OneToOne(() => MetaOptions)
+  @OneToOne(() => MetaOptions, {
+    cascade: true,
+  })
   @JoinColumn()
   metaOptions?: MetaOptions;
 }

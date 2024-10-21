@@ -52,22 +52,27 @@ export class PostsService {
    * @returns
    */
   public async create(createPostDto: CreatePostsDto) {
-    // create metaOptions
-    let metaOptions = createPostDto.metaOptions
-      ? this.metaOptionsRepository.create(createPostDto.metaOptions)
-      : null;
-    if (metaOptions) {
-      await this.metaOptionsRepository.save(metaOptions);
-    }
-    // create post
     let post = this.postRepository.create({ ...createPostDto });
 
-    if (metaOptions) {
-      // add metaOptions to the post
-      post.metaOptions = metaOptions;
-    }
-
-    console.log(post);
     return await this.postRepository.save(post);
+  }
+
+  /**
+   * Method to delete a Post
+   */
+  public async delete(postId: number) {
+    const post = await this.postRepository.findOneBy({ id: postId });
+
+    // check if post exists
+    if (!post) {
+      return null;
+    }
+    // delete post
+    await this.postRepository.delete(postId);
+
+    // delete meta options associated with this post
+    await this.metaOptionsRepository.delete({ id: postId });
+
+    return { deleted: true, id: postId };
   }
 }
