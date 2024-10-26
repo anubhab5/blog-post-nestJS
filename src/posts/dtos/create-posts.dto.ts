@@ -16,6 +16,7 @@ import {
 import { CreatePostsMetaOptionsDto } from "../../meta-options/dtos/create-posts-meta-option.dto";
 import { Type } from "class-transformer";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Tag } from "src/tags/entity/tag.entity";
 
 /**
  *
@@ -141,14 +142,13 @@ export class CreatePostsDto {
    * The tags of the post list
    */
   @ApiPropertyOptional({
-    description: "The tags of the post",
-    example: ["tag1", "tag2"],
+    description: "Array of tags ids",
+    example: [1, 2],
   })
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  @MinLength(3, { each: true })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   /**
    * The meta options of the post key- value

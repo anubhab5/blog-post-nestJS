@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -10,6 +12,7 @@ import { PostTypeEnum, StatusEnum } from "../dtos/create-posts.dto";
 import { CreatePostsMetaOptionsDto } from "../../meta-options/dtos/create-posts-meta-option.dto";
 import { MetaOptions } from "src/meta-options/entity/meta-options.entity";
 import { User } from "src/users/entity/user.entity";
+import { Tag } from "src/tags/entity/tag.entity";
 
 @Entity()
 export class Post {
@@ -97,11 +100,6 @@ export class Post {
   publishOn?: Date;
 
   /**
-   *
-   */
-  tags?: string[];
-
-  /**
    * Join Column
    */
   @OneToOne(() => MetaOptions, (metaOptions) => metaOptions.post, {
@@ -115,4 +113,11 @@ export class Post {
   })
   @JoinColumn()
   author: User;
+
+  /**
+   *
+   */
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags?: Tag[];
 }

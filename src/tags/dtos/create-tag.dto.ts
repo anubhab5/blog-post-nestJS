@@ -13,7 +13,7 @@ import {
 /**
  * Tags dto class
  */
-export class Tags {
+export class CreateTagsDto {
   /**
    * Name of the tag
    */
