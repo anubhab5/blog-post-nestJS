@@ -27,23 +27,15 @@ export class PostsService {
     /** constructor */
   }
 
-  public findAll(userId: number) {
-    const user = this.usersService.findById(userId);
-
-    return [
-      {
-        id: 1,
-        title: "Post 1",
-        content: "Content 1",
-        user,
+  public async findAll(userId: number) {
+    // find all posts
+    let posts = await this.postRepository.find({
+      relations: {
+        metaOptions: true,
+        // author: true, // This is an option; same can be achieved if we use eager loading option in entity
       },
-      {
-        id: 2,
-        title: "Post 2",
-        content: "Content 2",
-        user,
-      },
-    ];
+    });
+    return posts;
   }
 
   /**
@@ -52,7 +44,10 @@ export class PostsService {
    * @returns
    */
   public async create(createPostDto: CreatePostsDto) {
-    let post = this.postRepository.create({ ...createPostDto });
+    // Find the author from database
+    const author = await this.usersService.findById(createPostDto.authorId);
+
+    let post = this.postRepository.create({ ...createPostDto, author });
 
     return await this.postRepository.save(post);
   }
@@ -61,18 +56,7 @@ export class PostsService {
    * Method to delete a Post
    */
   public async delete(postId: number) {
-    const post = await this.postRepository.findOneBy({ id: postId });
-
-    // check if post exists
-    if (!post) {
-      return null;
-    }
-    // delete post
     await this.postRepository.delete(postId);
-
-    // delete meta options associated with this post
-    await this.metaOptionsRepository.delete({ id: postId });
-
-    return { deleted: true, id: postId };
+    return { success: true };
   }
 }

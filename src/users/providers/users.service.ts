@@ -60,12 +60,8 @@ export class UsersService {
    * @param id
    * @returns
    */
-  public findById(id: number) {
-    return {
-      id,
-      firstName: "John",
-      email: "john@example.com",
-    };
+  public async findById(id: number) {
+    return await this.usersRepository.findOneBy({ id });
   }
 
   public async createUser(createUserDto: CreateUserDto) {

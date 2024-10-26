@@ -2,12 +2,14 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PostTypeEnum, StatusEnum } from "../dtos/create-posts.dto";
 import { CreatePostsMetaOptionsDto } from "../../meta-options/dtos/create-posts-meta-option.dto";
 import { MetaOptions } from "src/meta-options/entity/meta-options.entity";
+import { User } from "src/users/entity/user.entity";
 
 @Entity()
 export class Post {
@@ -100,11 +102,17 @@ export class Post {
   tags?: string[];
 
   /**
-   *
+   * Join Column
    */
-  @OneToOne(() => MetaOptions, {
+  @OneToOne(() => MetaOptions, (metaOptions) => metaOptions.post, {
+    cascade: true,
+  })
+  metaOptions?: MetaOptions;
+
+  @ManyToOne(() => User, (author) => author.posts, {
+    eager: true,
     cascade: true,
   })
   @JoinColumn()
-  metaOptions?: MetaOptions;
+  author: User;
 }

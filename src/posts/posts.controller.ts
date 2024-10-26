@@ -38,7 +38,7 @@ export class PostsController {
     status: 201,
     description: "blog posts returned successfully",
   })
-  @Get("/:userId")
+  @Get("/:userId?")
   public getPosts(@Param("userId") userId: number) {
     return this.postsService.findAll(userId);
   }
