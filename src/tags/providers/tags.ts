@@ -36,4 +36,22 @@ export class TagsService {
       },
     });
   }
+
+  /**
+   *
+   * @param tagId
+   * @returns
+   */
+  public async delete(tagId: number) {
+    await this.tagsRepository.delete(tagId);
+    return { success: true, id: tagId };
+  }
+
+  /**
+   *
+   */
+  public async softDelete(tagId: number) {
+    await this.tagsRepository.softDelete(tagId);
+    return { success: true, id: tagId };
+  }
 }

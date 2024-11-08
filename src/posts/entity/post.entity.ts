@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -7,6 +8,7 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { PostTypeEnum, StatusEnum } from "../dtos/create-posts.dto";
 import { CreatePostsMetaOptionsDto } from "../../meta-options/dtos/create-posts-meta-option.dto";
@@ -117,7 +119,21 @@ export class Post {
   /**
    *
    */
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => Tag, (tag) => tag.posts, {
+    eager: true,
+  })
   @JoinTable()
   tags?: Tag[];
+
+  /**
+   *
+   */
+  @CreateDateColumn()
+  createDate: Date;
+
+  /**
+   *
+   */
+  @UpdateDateColumn()
+  updateDate: Date;
 }
